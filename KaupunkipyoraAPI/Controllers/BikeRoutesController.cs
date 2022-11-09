@@ -1,0 +1,121 @@
+﻿using AutoMapper;
+using KaupunkipyoraAPI.Contracts;
+using KaupunkipyoraAPI.Models.DTO;
+using KaupunkipyoraAPI.Models.Entity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
+
+namespace KaupunkipyoraAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    [Produces("application/json")]
+    public class BikeRoutesController : BaseController
+    {
+        public BikeRoutesController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper) { }
+
+        // GET: api/<RoutesController>
+        [HttpGet]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetAll()
+        {
+            try
+            {
+                var routes = await _UOW.BikeRouteRepository.GetAllAsync();
+
+                return Ok(_mapper.Map<IEnumerable<BikeRouteDTO>>(routes));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // GET api/<RoutesController>/5
+        [HttpGet("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult?> Get(int id)
+        {
+            try
+            {
+                var route = await _UOW.BikeRouteRepository.GetByIdAsync(id);
+                if (route == null)
+                    return NotFound("Not found");
+
+                return Ok(_mapper.Map<BikeRouteDTO>(route));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // POST api/<RoutesController>
+        [HttpPost, Authorize]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> Post([FromBody] BikeRouteCreateDTO route)
+        {
+            try
+            {
+                var toBeCreatedRuote = _mapper.Map<BikeRoute>(route);
+                var createdRoute = await _UOW.BikeRouteRepository.AddAsync(toBeCreatedRuote);
+
+                return Ok(createdRoute);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // PUT api/<RoutesController>/5
+        [HttpPut("{id}"), Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> Put(int id, [FromBody] BikeRouteUpdateDTO route)
+        {
+            try
+            {
+                var toBeUpdatedRuote = _mapper.Map<BikeRoute>(route);
+                var updatedRoute = await _UOW.BikeRouteRepository.UpdateAsync(toBeUpdatedRuote);
+
+                return Ok(updatedRoute);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        // DELETE api/<RoutesController>/5
+        [HttpDelete("{id}"), Authorize]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var entity = await _UOW.BikeRouteRepository.GetByIdAsync(id);
+                if (entity == null)
+                    return NotFound();
+
+                var deletedRows = await _UOW.BikeRouteRepository.DeleteAsync(entity.Id);
+                if (deletedRows < 1)
+                    throw new Exception("No rows deleted");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+    }
+}
