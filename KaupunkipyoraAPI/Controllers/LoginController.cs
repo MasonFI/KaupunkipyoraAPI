@@ -1,4 +1,6 @@
-﻿using KaupunkipyoraAPI.Models.DTO;
+﻿using AutoMapper;
+using KaupunkipyoraAPI.Contracts;
+using KaupunkipyoraAPI.Models.DTO;
 using KaupunkipyoraAPI.Models.Entity;
 using KaupunkipyoraAPI.Services.Settings;
 using Microsoft.AspNetCore.Authorization;
@@ -15,71 +17,47 @@ namespace KaupunkipyoraAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    public class LoginController : ControllerBase
+    public class LoginController : BaseController
     {
-        private APIOptions _APIOptions;
-        private List<User> GetUsers()
-        {
-            return new List<User>()
-            {
-                new User()
-                {
-                    Username = "joonas.manninen",
-                    Password = "test1234",
-                    IncorrectLoginCount = 0,
-                },
-                new User()
-                {
-                    Username = "joonas.manninen.locked",
-                    Password = "test1234",
-                    IncorrectLoginCount = 4,
-                },
-            };
-        }
-
-        public LoginController(IOptionsMonitor<APIOptions> options)
-        {
-            _APIOptions = options.CurrentValue;
-        }
+        public LoginController(IUnitOfWork uow,
+            IMapper mapper,
+            IOptionsMonitor<APIOptions> options) : base(uow, mapper, options) { }
 
         [HttpPost]
         [Produces("application/text")]
-        public IActionResult Login(LoginDTO loginDTO)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             try
             {
-                var user = GetUsers().Where(x => x.Username == loginDTO.Username).FirstOrDefault();
+                var user = await _UOW.UserRepository.GetByUsername(loginDTO.Username);
 
-                if (user == null)
+                if (user == null || user.Password != loginDTO.Password)
                 {
-                    return Unauthorized("Incorrect login");
-                }
-
-                if (user.Password != loginDTO.Password)
-                {
-                    user.IncorrectLoginCount++;
-                    if (user.IncorrectLoginCount > 4)
-                    {
-                        return Unauthorized("Incorrect login");
-                    }
-
                     return Unauthorized("Incorrect login");
                 }
 
                 var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_APIOptions.JWT.SecretKey));
                 var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-                var jwtSecurityToken = new JwtSecurityToken(
+                var tokeOptions = new JwtSecurityToken(
                     issuer: _APIOptions.JWT.Issuer,
                     audience: _APIOptions.JWT.Audience,
+                    claims: new List<Claim>(),
                     expires: DateTime.Now.AddMinutes(_APIOptions.JWT.ExpirationInMinutes),
                     signingCredentials: signinCredentials
                 );
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
-                return Ok(new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken));
+                return Ok(new AuthenticatedResponseDTO { Token = tokenString });
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest("Incorrect login");
+#if DEBUG
+                return StatusCode(500, $"Exception: {ex.Message}");
+#endif
+                return StatusCode(500, "Exception");
             }
         }
     }

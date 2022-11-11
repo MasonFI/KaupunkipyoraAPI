@@ -2,21 +2,15 @@
 using Dapper;
 using KaupunkipyoraAPI.Context;
 using KaupunkipyoraAPI.Contracts;
-using KaupunkipyoraAPI.Models.DTO;
 using KaupunkipyoraAPI.Models.Entity;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 
 namespace KaupunkipyoraAPI.Repository
 {
-    public class BikeRouteRepository : IBikeRouteRepository
+    public class BikeRouteRepository : BaseRepository<BikeRoute>, IBikeRouteRepository
     {
-        private readonly DapperContext _context;
-        private readonly IMapper _mapper;
-
-        private static string Table => "Route";
-        private static string PrimaryKey => "Id";
-        private static List<string> Columns => new()
+        protected override string Table => "BikeRoute";
+        protected override List<string> Columns => new()
         {
             PrimaryKey,
             "DepartureTime",
@@ -33,29 +27,11 @@ namespace KaupunkipyoraAPI.Repository
             "UpdatedById"
         };
 
-        public BikeRouteRepository(DapperContext context, IMapper mapper)
+        public BikeRouteRepository(DapperContext context, IMapper mapper) : base(context, mapper)
         {
-            _context = context;
-            _mapper = mapper;
         }
 
-        public async Task<BikeRoute?> GetByIdAsync(int id)
-        {
-            var query = $"SELECT {String.Join(",", Columns)} FROM {Table} WHERE Id = @Id";
-            using var connection = _context.CreateConnection();
-            var route = await connection.QuerySingleOrDefaultAsync<BikeRoute?>(query, new { id });
-            return route;
-        }
-
-        public async Task<IEnumerable<BikeRoute>> GetAllAsync()
-        {
-            var query = $"SELECT {String.Join(",", Columns)} FROM {Table}";
-            using var connection = _context.CreateConnection();
-            var routes = await connection.QueryAsync<BikeRoute>(query);
-            return routes.ToList();
-        }
-
-        public async Task<BikeRoute> AddAsync(BikeRoute entity)
+        public override async Task<BikeRoute> AddAsync(BikeRoute entity)
         {
             var query = @$"INSERT INTO {Table}
                 (DepartureTime,
@@ -97,14 +73,14 @@ namespace KaupunkipyoraAPI.Repository
 
             using var connection = _context.CreateConnection();
             var id = await connection.QuerySingleAsync<int>(query, parameters);
-            
+
             var createdBikeRoute = _mapper.Map<BikeRoute>(entity);
             createdBikeRoute.Id = id;
-            
+
             return createdBikeRoute;
         }
 
-        public async Task<BikeRoute> UpdateAsync(BikeRoute entity)
+        public override async Task<BikeRoute> UpdateAsync(BikeRoute entity)
         {
             var query = @$"UPDATE {Table} SET
                 DepartureTime = @DepartureTime,
@@ -142,13 +118,6 @@ namespace KaupunkipyoraAPI.Repository
             createdBikeRoute.Id = id;
 
             return createdBikeRoute;
-        }
-
-        public async Task<int> DeleteAsync(int id)
-        {
-            var query = @$"DELETE FROM {Table} WHERE Id = @Id";
-            using var connection = _context.CreateConnection();
-            return await connection.ExecuteAsync(query, new { id });
         }
     }
 }

@@ -2,9 +2,12 @@
 using KaupunkipyoraAPI.Controllers;
 using KaupunkipyoraAPI.Models.DTO;
 using KaupunkipyoraAPI.Models.Profiles;
+using KaupunkipyoraAPI.Services.Settings;
 using KaupunkipyoraAPI.Tests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +30,8 @@ namespace KaupunkipyoraAPI.Tests
         {
             var uowMock = MockIUnitOfWork.GetMock();
             var mapper = GetMapper();
-            var controller = new BikeRoutesController(uowMock.Object, mapper);
+            var apiOptionsMock = MockAPIOptions.GetMock();
+            var controller = new BikeRoutesController(uowMock.Object, mapper, apiOptionsMock.Object);
 
             var result = await controller.GetAll() as ObjectResult;
 

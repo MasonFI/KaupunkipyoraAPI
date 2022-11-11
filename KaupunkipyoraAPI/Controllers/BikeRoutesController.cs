@@ -2,8 +2,10 @@
 using KaupunkipyoraAPI.Contracts;
 using KaupunkipyoraAPI.Models.DTO;
 using KaupunkipyoraAPI.Models.Entity;
+using KaupunkipyoraAPI.Services.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Linq.Expressions;
 
 namespace KaupunkipyoraAPI.Controllers
@@ -13,7 +15,9 @@ namespace KaupunkipyoraAPI.Controllers
     [Produces("application/json")]
     public class BikeRoutesController : BaseController
     {
-        public BikeRoutesController(IUnitOfWork uow, IMapper mapper) : base(uow, mapper) { }
+        public BikeRoutesController(IUnitOfWork uow,
+            IMapper mapper,
+            IOptionsMonitor<APIOptions> options) : base(uow, mapper, options) { }
 
         // GET: api/<RoutesController>
         [HttpGet]

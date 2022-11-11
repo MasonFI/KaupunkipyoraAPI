@@ -3,8 +3,11 @@ using KaupunkipyoraAPI.Contracts;
 using KaupunkipyoraAPI.Repository;
 using KaupunkipyoraAPI.Services;
 using KaupunkipyoraAPI.Services.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,9 +18,27 @@ builder.Services.Configure<APIOptions>(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Add Dapper Unit of work
-builder.Services.AddSingleton<DapperContext>();
-builder.Services.AddTransient<IBikeRouteRepository, BikeRouteRepository>();
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<DapperContext>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+// add JWT authentication
+builder.Services.AddAuthentication(opt => {
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = "https://localhost:5001",
+            ValidAudience = "https://localhost:5001",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+        };
+    });
 
 builder.Services.AddControllers();
 
