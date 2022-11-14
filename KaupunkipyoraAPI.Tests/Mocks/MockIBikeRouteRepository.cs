@@ -7,28 +7,30 @@ namespace KaupunkipyoraAPI.Tests.Mocks
 {
     internal class MockIBikeRouteRepository
     {
+        public static BikeRoute MockBikeRouteData = new()
+        {
+            Id = 1,
+            DepartureTime = DateTime.Now.AddDays(-10),
+            ReturnTime = DateTime.Now.AddDays(-10).AddHours(1),
+            DepartureStationId = 1,
+            DepartureStationName = "Station 1",
+            ReturnStationId = 2,
+            ReturnStationName = "Station 2",
+            CoveredDistanceInMeters = 1000,
+            DurationInSeconds = 600,
+            Created = DateTime.Now.AddDays(-9),
+            CreatedById = 1,
+            Updated = DateTime.Now.AddDays(-8),
+            UpdatedById = 2
+        };
+
         public static Mock<IBikeRouteRepository> GetMock()
         {
             var mock = new Mock<IBikeRouteRepository>();
 
             List<BikeRoute> bikeRoutes = new()
             {
-                new BikeRoute()
-                {
-                    Id = 1,
-                    DepartureTime = DateTime.Now.AddDays(-10),
-                    ReturnTime  = DateTime.Now.AddDays(-10).AddHours(1),
-                    DepartureStationId = 1,
-                    DepartureStationName = "Station 1",
-                    ReturnStationId = 2,
-                    ReturnStationName = "Station 2",
-                    CoveredDistanceInMeters = 1000,
-                    DurationInSeconds = 600,
-                    Created = DateTime.Now.AddDays(-9),
-                    CreatedById = 1,
-                    Updated = DateTime.Now.AddDays(-8),
-                    UpdatedById = 2
-                }
+                MockBikeRouteData
             };
 
             mock.Setup(m => m.GetAllAsync())

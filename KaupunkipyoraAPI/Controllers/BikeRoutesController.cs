@@ -69,7 +69,7 @@ namespace KaupunkipyoraAPI.Controllers
                 var toBeCreatedRuote = _mapper.Map<BikeRoute>(route);
                 var createdRoute = await _UOW.BikeRouteRepository.AddAsync(toBeCreatedRuote);
 
-                return Ok(createdRoute);
+                return StatusCode(StatusCodes.Status201Created, _mapper.Map<BikeRouteDTO>(createdRoute));
             }
             catch (Exception ex)
             {
@@ -89,7 +89,7 @@ namespace KaupunkipyoraAPI.Controllers
                 var toBeUpdatedRuote = _mapper.Map<BikeRoute>(route);
                 var updatedRoute = await _UOW.BikeRouteRepository.UpdateAsync(toBeUpdatedRuote);
 
-                return Ok(updatedRoute);
+                return Ok(_mapper.Map<BikeRouteDTO>(updatedRoute));
             }
             catch (Exception ex)
             {

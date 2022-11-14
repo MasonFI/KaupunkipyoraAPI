@@ -9,10 +9,12 @@
   <ItemGroup>
     <None Remove="Migrations\0001 - APIUser.sql" />
     <None Remove="Migrations\0002 - BikeRoute.sql" />
+    <None Remove="Migrations\0003 - Seed temp data.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Migrations\0001 - APIUser.sql" />
+    <EmbeddedResource Include="Migrations\0003 - Seed temp data.sql" />
     <EmbeddedResource Include="Migrations\0002 - BikeRoute.sql" />
   </ItemGroup>
 

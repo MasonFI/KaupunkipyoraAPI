@@ -14,4 +14,4 @@ CREATE TABLE [dbo].[APIUser](
 GO
 
 INSERT INTO APIUser (Username, Password, Email, Created) VALUES 
-	('test',HashPassword('test123!'),'test@test.com',CURRENT_TIMESTAMP);
+	('test','test123!','test@test.com',CURRENT_TIMESTAMP);
