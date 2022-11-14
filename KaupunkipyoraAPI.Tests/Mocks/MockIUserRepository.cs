@@ -19,7 +19,6 @@ namespace KaupunkipyoraAPI.Tests.Mocks
                     Username = "test",
                     Password = "test1234",
                     Email = "test@test.com",
-                    IncorrectLoginCount = 1,
                     Created = DateTime.Now.AddDays(-9),
                     CreatedById = 1,
                     Updated = DateTime.Now.AddDays(-8),

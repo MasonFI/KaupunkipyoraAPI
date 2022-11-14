@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaupunkipyoraAPI", "KaupunkipyoraAPI\KaupunkipyoraAPI.csproj", "{7F26E6D1-606C-4C83-821B-40869BCB5A8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaupunkipyoraAPI", "KaupunkipyoraAPI\KaupunkipyoraAPI.csproj", "{7F26E6D1-606C-4C83-821B-40869BCB5A8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaupunkipyoraAPI.Tests", "KaupunkipyoraAPI.Tests\KaupunkipyoraAPI.Tests.csproj", "{9AE8CA39-A017-463D-8AB2-DAEFA06C6467}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KaupunkipyoraAPI.Tests", "KaupunkipyoraAPI.Tests\KaupunkipyoraAPI.Tests.csproj", "{9AE8CA39-A017-463D-8AB2-DAEFA06C6467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswordHasher", "PasswordHasher\PasswordHasher.csproj", "{CC494AF8-5E75-4B87-A877-52CE166AA9FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9AE8CA39-A017-463D-8AB2-DAEFA06C6467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AE8CA39-A017-463D-8AB2-DAEFA06C6467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AE8CA39-A017-463D-8AB2-DAEFA06C6467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC494AF8-5E75-4B87-A877-52CE166AA9FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC494AF8-5E75-4B87-A877-52CE166AA9FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC494AF8-5E75-4B87-A877-52CE166AA9FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC494AF8-5E75-4B87-A877-52CE166AA9FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,8 +13,8 @@ CREATE TABLE [dbo].[BikeRoute](
 	[Updated] [datetime] NULL,
 	[UpdatedById] [int] NULL,
 	CONSTRAINT PK_BikeRoute PRIMARY KEY ([Id]),
-	FOREIGN KEY (CreatedById) REFERENCES [User] (Id),
-	FOREIGN KEY (UpdatedById) REFERENCES [User] (Id),
+	FOREIGN KEY (CreatedById) REFERENCES [APIUser] (Id),
+	FOREIGN KEY (UpdatedById) REFERENCES [APIUser] (Id),
 ) ON [PRIMARY]
 GO
 

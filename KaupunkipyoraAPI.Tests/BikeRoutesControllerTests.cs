@@ -2,9 +2,13 @@
 using KaupunkipyoraAPI.Controllers;
 using KaupunkipyoraAPI.Models.DTO;
 using KaupunkipyoraAPI.Models.Profiles;
+using KaupunkipyoraAPI.Services.Settings;
 using KaupunkipyoraAPI.Tests.Mocks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Moq;
+using NuGet.Frameworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +27,12 @@ namespace KaupunkipyoraAPI.Tests
         }
 
         [Fact]
-        public async Task Test_GetAsync()
+        public async Task Test_GetAllAsync()
         {
             var uowMock = MockIUnitOfWork.GetMock();
             var mapper = GetMapper();
-            var controller = new BikeRoutesController(uowMock.Object, mapper);
+            var apiOptionsMock = MockAPIOptions.GetMock();
+            var controller = new BikeRoutesController(uowMock.Object, mapper, apiOptionsMock.Object);
 
             var result = await controller.GetAll() as ObjectResult;
 
@@ -35,6 +40,28 @@ namespace KaupunkipyoraAPI.Tests
             Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
             Assert.IsAssignableFrom<IEnumerable<BikeRouteDTO>>(result.Value);
             Assert.NotEmpty(result.Value as IEnumerable<BikeRouteDTO>);
+        }
+
+        [Fact]
+        public async Task Test_GetAsync()
+        {
+            var uowMock = MockIUnitOfWork.GetMock();
+            var mapper = GetMapper();
+            var apiOptionsMock = MockAPIOptions.GetMock();
+            var controller = new BikeRoutesController(uowMock.Object, mapper, apiOptionsMock.Object);
+
+            var result = await controller.Get(1) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+            Assert.IsAssignableFrom<BikeRouteDTO>(result.Value);
+
+            var mockBikeRoute = MockIBikeRouteRepository.MockBikeRouteData;
+            var readdBikeRouteDTO = result.Value as BikeRouteDTO;
+
+            Assert.NotNull(readdBikeRouteDTO);
+            Assert.Equal(1, readdBikeRouteDTO.Id);
+            Assert.Equal(mockBikeRoute.CoveredDistanceInMeters, readdBikeRouteDTO.CoveredDistanceInMeters);
         }
     }
 }

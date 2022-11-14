@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Migrations\0001 - User.sql" />
+    <None Remove="Migrations\0001 - APIUser.sql" />
     <None Remove="Migrations\0002 - BikeRoute.sql" />
-    <None Remove="Migrations\0003 - User lockable.sql" />
+    <None Remove="Migrations\0003 - Seed temp data.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\0003 - User lockable.sql" />
-    <EmbeddedResource Include="Migrations\0001 - User.sql" />
+    <EmbeddedResource Include="Migrations\0001 - APIUser.sql" />
+    <EmbeddedResource Include="Migrations\0003 - Seed temp data.sql" />
     <EmbeddedResource Include="Migrations\0002 - BikeRoute.sql" />
   </ItemGroup>
 
@@ -23,6 +23,7 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="dbup-sqlserver" Version="4.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.25.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.25.0" />

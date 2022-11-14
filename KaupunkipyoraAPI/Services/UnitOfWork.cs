@@ -1,16 +1,25 @@
-﻿using KaupunkipyoraAPI.Contracts;
+﻿using AutoMapper;
+using KaupunkipyoraAPI.Context;
+using KaupunkipyoraAPI.Contracts;
+using KaupunkipyoraAPI.Repository;
 
 namespace KaupunkipyoraAPI.Services
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IBikeRouteRepository bikeRouteRepository, IUserRepository userRepository)
+        public DapperContext _context { get; private set; }
+        public IMapper _mapper { get; private set; }
+
+        public UnitOfWork(DapperContext context, IMapper mapper)
         {
-            BikeRouteRepository = bikeRouteRepository;
-            UserRepository = userRepository;
+            _context = context;
+            _mapper = mapper;
         }
 
-        public IBikeRouteRepository BikeRouteRepository { get; }
-        public IUserRepository UserRepository { get; }
+        private IBikeRouteRepository? _BikeRouteRepository { get; set; }
+        public IBikeRouteRepository BikeRouteRepository => _BikeRouteRepository ??= new BikeRouteRepository(_context, _mapper);
+        private IUserRepository? _UserRepository { get; set; }
+        public IUserRepository UserRepository => _UserRepository ??= new UserRepository(_context, _mapper);
+
     }
 }

@@ -8,13 +8,12 @@ namespace KaupunkipyoraAPI.Models.Entity
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public int IncorrectLoginCount { get; set; }
 
         public DateTime Created { get; set; }
-        public int CreatedById { get; set; }
+        public int? CreatedById { get; set; }
         public DateTime? Updated { get; set; }
         public int? UpdatedById { get; set; }
-        public User CreatedBy { get; set; } = default!;
+        public User? CreatedBy { get; set; } = default!;
         public User? UpdatedBy { get; set; }
     }
 }
