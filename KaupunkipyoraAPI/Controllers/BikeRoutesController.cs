@@ -33,7 +33,11 @@ namespace KaupunkipyoraAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                string message = "Interla Exception";
+#if DEBUG
+                message += $": {ex.Message}";
+#endif
+                return StatusCode(500, message);
             }
         }
 
@@ -54,7 +58,11 @@ namespace KaupunkipyoraAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                string message = "Interla Exception";
+#if DEBUG
+                message += $": {ex.Message}";
+#endif
+                return StatusCode(500, message);
             }
         }
 
@@ -73,7 +81,11 @@ namespace KaupunkipyoraAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                string message = "Interla Exception";
+#if DEBUG
+                message += $": {ex.Message}";
+#endif
+                return StatusCode(500, message);
             }
         }
 
@@ -97,7 +109,11 @@ namespace KaupunkipyoraAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                string message = "Interla Exception";
+#if DEBUG
+                message += $": {ex.Message}";
+#endif
+                return StatusCode(500, message);
             }
         }
 
@@ -122,7 +138,11 @@ namespace KaupunkipyoraAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                string message = "Interla Exception";
+#if DEBUG
+                message += $": {ex.Message}";
+#endif
+                return StatusCode(500, message);
             }
         }
     }

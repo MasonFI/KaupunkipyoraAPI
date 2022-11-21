@@ -54,10 +54,11 @@ namespace KaupunkipyoraAPI.Controllers
             }
             catch (Exception ex)
             {
+                string message = "Interla Exception";
 #if DEBUG
-                return StatusCode(500, $"Exception: {ex.Message}");
+                message += $": {ex.Message}";
 #endif
-                return StatusCode(500, "Exception");
+                return StatusCode(500, message);
             }
         }
     }
