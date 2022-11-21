@@ -22,10 +22,12 @@ builder.Services.AddScoped<DapperContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // add JWT authentication
-builder.Services.AddAuthentication(opt => {
-    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+builder.Services
+    .AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -34,9 +36,11 @@ builder.Services.AddAuthentication(opt => {
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "https://localhost:5001",
-            ValidAudience = "https://localhost:5001",
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
+            ValidIssuer = builder.Configuration.GetRequiredSection("JWT")["Issuer"],
+            ValidAudience = builder.Configuration.GetRequiredSection("JWT")["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration.GetRequiredSection("JWT")["SecretKey"])
+            )
         };
     });
 
