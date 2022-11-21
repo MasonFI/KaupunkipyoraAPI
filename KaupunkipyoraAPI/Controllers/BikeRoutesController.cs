@@ -86,6 +86,10 @@ namespace KaupunkipyoraAPI.Controllers
         {
             try
             {
+                var routeInDb = await _UOW.BikeRouteRepository.GetByIdAsync(id);
+                if (routeInDb == null)
+                    return NotFound("Not found");
+
                 var toBeUpdatedRuote = _mapper.Map<BikeRoute>(route);
                 var updatedRoute = await _UOW.BikeRouteRepository.UpdateAsync(toBeUpdatedRuote);
 
