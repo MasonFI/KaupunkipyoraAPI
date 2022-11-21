@@ -27,7 +27,7 @@ namespace KaupunkipyoraAPI.Tests
         }
 
         [Fact]
-        public async Task Test_GetAllAsync()
+        public async Task GetAllAsync_Returns_ListOf_BikeRouteDTO()
         {
             var uowMock = MockIUnitOfWork.GetMock();
             var mapper = GetMapper();
@@ -43,7 +43,7 @@ namespace KaupunkipyoraAPI.Tests
         }
 
         [Fact]
-        public async Task Test_GetAsync()
+        public async Task GetAsync_Returns_BikeRouteDTO()
         {
             var uowMock = MockIUnitOfWork.GetMock();
             var mapper = GetMapper();
@@ -62,6 +62,20 @@ namespace KaupunkipyoraAPI.Tests
             Assert.NotNull(readdBikeRouteDTO);
             Assert.Equal(1, readdBikeRouteDTO.Id);
             Assert.Equal(mockBikeRoute.CoveredDistanceInMeters, readdBikeRouteDTO.CoveredDistanceInMeters);
+        }
+
+        [Fact]
+        public async Task GetAsync_Returns_NotFound()
+        {
+            var uowMock = MockIUnitOfWork.GetMock();
+            var mapper = GetMapper();
+            var apiOptionsMock = MockAPIOptions.GetMock();
+            var controller = new BikeRoutesController(uowMock.Object, mapper, apiOptionsMock.Object);
+
+            var result = await controller.Get(3) as ObjectResult;
+
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status404NotFound, result.StatusCode);
         }
     }
 }
