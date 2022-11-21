@@ -29,7 +29,7 @@ namespace KaupunkipyoraAPI.Repository
 
         public async Task<User?> GetByUsername(string username)
         {
-            var query = @$"SELECT {String.Join(",", Columns)} FROM {Table} WHERE Username = @username";
+            var query = @$"SELECT {String.Join(",", Columns)}, Password FROM {Table} WHERE Username = @username";
 
             using var connection = _context.CreateConnection();
             var entity = await connection.QuerySingleOrDefaultAsync<User?>(query, new { username });
